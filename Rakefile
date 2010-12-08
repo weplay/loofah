@@ -18,6 +18,22 @@ Hoe.spec "loofah" do
   #   exclude: !ruby/regexp /\/tmp\/|\/rails_tests\/|CVS|TAGS|\.(svn|git|DS_Store)/
 end
 
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gem|
+    gem.name = "loofah"
+    gem.summary = %Q{HTML sanitization}
+    gem.description = %Q{Loofah is an HTML sanitizer. It will always fix broken markup, but can also sanitize unsafe tags in a few different ways, and transform the markup for storage or display.}
+    gem.email = "tech@weplay.com"
+    gem.homepage = "http://github.com/weplay/loofah"
+    gem.authors = ["Bryan Helmkamp", "Mike Dalessio"]
+    gem.add_dependency 'nokogiri', '>= 1.3.3'
+  end
+rescue LoadError
+  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+end
+
+
 if File.exist?("rails_test/Rakefile")
   load "rails_test/Rakefile"
 else
