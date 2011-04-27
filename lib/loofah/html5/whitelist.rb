@@ -1,5 +1,5 @@
 module Loofah
-  module HTML5
+  module HTML5 # :nodoc:
     #
     #  HTML whitelist lifted from HTML5lib sanitizer code:
     #
@@ -152,19 +152,17 @@ module Loofah
         col
         input
       ]
+
+      # additional tags we should consider safe since we have libxml2 fixing up our documents.
+      TAGS_SAFE_WITH_LIBXML2 = %w[html head body]
+      ALLOWED_ELEMENTS_WITH_LIBXML2 = ALLOWED_ELEMENTS + TAGS_SAFE_WITH_LIBXML2
     end      
 
     #
     #  The HTML5lib whitelist arrays, transformed into hashes for faster lookup.
     #
     module HashedWhiteList
-      WhiteList.constants.each do |constant|
-        next unless WhiteList.module_eval("#{constant}").is_a?(Array)
-        module_eval <<-CODE
-        #{constant} = {}
-        WhiteList::#{constant}.each { |c| #{constant}[c] = true ; #{constant}[c.downcase] = true }
-      CODE
-      end
+      include Loofah::MetaHelpers::HashifiedConstants(WhiteList)
     end
   end
 end

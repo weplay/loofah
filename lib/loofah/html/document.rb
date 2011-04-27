@@ -1,19 +1,18 @@
 module Loofah
-  module HTML
+  module HTML # :nodoc:
     #
     #  Subclass of Nokogiri::HTML::Document.
     #
-    #  See Loofah::ScrubberInstanceMethods for additional methods.
+    #  See Loofah::ScrubBehavior and Loofah::TextBehavior for additional methods.
     #
     class Document < Nokogiri::HTML::Document
-      include Loofah::InstanceMethods
+      include Loofah::ScrubBehavior::Node
+      include Loofah::DocumentDecorator
+      include Loofah::TextBehavior
 
-      private
-
-      def sanitize_roots # :nodoc:
-        xpath("/html/head","/html/body")
+      def serialize_root
+        at_xpath("/html/body")
       end
-
     end
   end
 end

@@ -7,6 +7,11 @@ require "action_view"
 require "action_controller/vendor/html-scanner"
 require "sanitize"
 require 'hitimes'
+require 'htmlfilter'
+
+unless defined?(HTMLFilter)
+  HTMLFilter = HtmlFilter
+end
 
 class RailsSanitize
   include ActionView::Helpers::SanitizeHelper

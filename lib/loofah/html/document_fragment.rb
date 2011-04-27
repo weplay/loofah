@@ -1,12 +1,12 @@
 module Loofah
-  module HTML
+  module HTML # :nodoc:
     #
-    #  Subclass of Nokogiri::HTML::DocumentFragment. Also includes Loofah::ScrubberInstanceMethods.
+    #  Subclass of Nokogiri::HTML::DocumentFragment.
     #
-    #  See Loofah::ScrubberInstanceMethods for additional methods.
+    #  See Loofah::ScrubBehavior and Loofah::TextBehavior for additional methods.
     #
     class DocumentFragment < Nokogiri::HTML::DocumentFragment
-      include Loofah::InstanceMethods
+      include Loofah::TextBehavior
 
       class << self
         #
@@ -15,24 +15,23 @@ module Loofah
         #  parse a fragment.
         #
         def parse tags
-          self.new(Loofah::HTML::Document.new, tags)
+          doc = Loofah::HTML::Document.new
+          doc.encoding = tags.encoding.name if tags.respond_to?(:encoding)
+          self.new(doc, tags)
         end
       end
 
       #
-      #  Returns the HTML markup contained by the fragment or document
+      #  Returns the HTML markup contained by the fragment
       #
       def to_s
-        sanitize_roots.children.to_s
+        serialize_root.children.to_s
       end
       alias :serialize :to_s
 
-      private
-
-      def sanitize_roots # :nodoc:
-        xpath("./body").first || self
+      def serialize_root
+        at_xpath("./body") || self
       end
-
     end
   end
 end
